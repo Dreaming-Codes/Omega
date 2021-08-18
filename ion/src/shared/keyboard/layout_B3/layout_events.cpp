@@ -66,7 +66,7 @@ const char * const s_nameForEvent[255] = {
   nullptr, "AlphaLock", "Cut", "Copy", "Paste", "Clear",
   "LeftBracket", "RightBracket", "LeftBrace", "RightBrace", "Underscore", "Sto",
   "Arcsine", "Arccosine", "Arctangent", "Equal", "Lower", "Greater",
-  "Micro", nullptr, "Omega", nullptr, nullptr, nullptr,
+  "Micro", nullptr, "Epsilon", nullptr, nullptr, nullptr,
   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
   nullptr, nullptr, nullptr, "BrightnessPlus", "BrightnessMinus", nullptr,
   nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,

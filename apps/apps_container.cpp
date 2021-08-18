@@ -411,7 +411,8 @@ void AppsContainer::redrawWindow(bool force) {
 
 void AppsContainer::activateExamMode(GlobalPreferences::ExamMode examMode) {
   assert(examMode != GlobalPreferences::ExamMode::Off && examMode != GlobalPreferences::ExamMode::Unknown);
-  reset();
+  //Maybe another day 😂
+  //reset();
   Ion::LED::setColor(KDColorRed);
   /* The Dutch exam mode LED is supposed to be orange but we can only make
    * blink "pure" colors: with RGB leds on or off (as the PWM is used for
