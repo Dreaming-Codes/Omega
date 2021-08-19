@@ -3,7 +3,6 @@
 #include <apps/i18n.h>
 #include "../apps_container.h"
 #include <assert.h>
-#include "eadk.h"
 #include <escher/metric.h>
 #include <ion.h>
 #include <ion/events.h>
