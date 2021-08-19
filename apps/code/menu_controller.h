@@ -67,7 +67,6 @@ public:
     assert(index == 0);
     return const_cast<Button *>(&m_consoleButton);
   }
-
 private:
   static constexpr int k_maxNumberOfDisplayableScriptCells = 5; // = 240/50
   static constexpr int k_parametersColumnWidth = Metric::EllipsisCellWidth;
