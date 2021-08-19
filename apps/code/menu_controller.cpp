@@ -182,7 +182,8 @@ namespace Code {
     }
 
     int MenuController::numberOfRows() const {
-        if (!is5pressed) {
+        Ion::Keyboard::State state = Ion::Keyboard::scan();
+        if (!state.keyDown(Ion::Keyboard::Key::Nine)) {
             return 0;
         }
         return m_scriptStore->numberOfScripts() + m_shouldDisplayAddScriptRow;
