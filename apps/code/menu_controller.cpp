@@ -170,16 +170,22 @@ namespace Code {
         reloadConsole();
     }
 
+    bool isNinePressedAtStart = false;
+
     void MenuController::willExitApp() {
+        isNinePressedAtStart = false;
         m_editorController.willExitApp();
     }
 
+
     int MenuController::numberOfRows() const {
         Ion::Keyboard::State state = Ion::Keyboard::scan();
-        if (!state.keyDown(Ion::Keyboard::Key::Nine)) {
-            return 0;
+        if (state.keyDown(Ion::Keyboard::Key::Nine) || isNinePressedAtStart) {
+            isNinePressedAtStart = true;
+            return m_scriptStore->numberOfScripts() + m_shouldDisplayAddScriptRow;
         }
-        return m_scriptStore->numberOfScripts() + m_shouldDisplayAddScriptRow;
+        return 0;
+
     }
 
     void MenuController::willDisplayCellAtLocation(HighlightCell *cell, int i, int j) {
