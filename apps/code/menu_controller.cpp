@@ -84,14 +84,7 @@ namespace Code {
         updateAddScriptRowDisplay();
     }
 
-    bool is5pressed = false;
-
     bool MenuController::handleEvent(Ion::Events::Event event) {
-        if (event == Ion::Events::Five) {
-            is5pressed = true;
-            return true;
-        }
-        is5pressed = false;
         if (event == Ion::Events::Down) {
             m_selectableTableView.deselectTable();
             footer()->setSelectedButton(0);
