@@ -2,11 +2,10 @@
 
 using namespace Poincare;
 
-constexpr Shared::SettingsMessageTree s_examModeMode[] = {Shared::SettingsMessageTree(I18n::Message::ExamModeModeStandard), Shared::SettingsMessageTree(I18n::Message::ExamModeModeNoSym), Shared::SettingsMessageTree(I18n::Message::ExamModeModeNoSymNoText)};
-constexpr Shared::SettingsMessageTree ExamModeConfiguration::s_modelExamChildren[] = {Shared::SettingsMessageTree(I18n::Message::ExamModeMode, s_examModeMode), Shared::SettingsMessageTree(I18n::Message::ActivateExamMode)};
+constexpr Shared::SettingsMessageTree ExamModeConfiguration::s_modelExamChildren[] = {Shared::SettingsMessageTree(I18n::Message::ActivateExamMode)};
 
 int ExamModeConfiguration::numberOfAvailableExamMode() {
-  return 2;
+  return 1;
 }
 
 GlobalPreferences::ExamMode ExamModeConfiguration::examModeAtIndex(int index) {
