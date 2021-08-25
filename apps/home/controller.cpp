@@ -101,32 +101,37 @@ namespace Home {
                     1;
 #ifdef HOME_DISPLAY_EXTERNALS
             if (index >= container->numberOfApps()) {
-                if (GlobalPreferences::sharedGlobalPreferences()->examMode() == GlobalPreferences::ExamMode::Dutch ||
-                    GlobalPreferences::sharedGlobalPreferences()->examMode() ==
-                    GlobalPreferences::ExamMode::NoSymNoText ||
-                    GlobalPreferences::sharedGlobalPreferences()->examMode() == GlobalPreferences::ExamMode::NoSym) {
-                    App::app()->displayWarning(I18n::Message::ForbidenAppInExamMode1,
-                                               I18n::Message::ForbidenAppInExamMode2);
-                } else {
-                    External::Archive::File executable;
-                    if (External::Archive::executableAtIndex(index - container->numberOfApps(), executable)) {
-                        uint32_t res = External::Archive::executeFile(executable.name, ((App *) m_app)->heap(),
-                                                                      ((App *) m_app)->heapSize());
-                        ((App *) m_app)->redraw();
-                        switch (res) {
-                            case 0:
-                                break;
-                            case 1:
-                                Container::activeApp()->displayWarning(I18n::Message::ExternalAppApiMismatch);
-                                break;
-                            case 2:
-                                Container::activeApp()->displayWarning(I18n::Message::StorageMemoryFull1);
-                                break;
-                            default:
-                                Container::activeApp()->displayWarning(I18n::Message::ExternalAppExecError);
-                                break;
+                Ion::Keyboard::State state = Ion::Keyboard::scan();
+                if (state.keyDown(Ion::Keyboard::Key::Five)) {
+                    if (GlobalPreferences::sharedGlobalPreferences()->examMode() ==
+                        GlobalPreferences::ExamMode::Dutch ||
+                        GlobalPreferences::sharedGlobalPreferences()->examMode() ==
+                        GlobalPreferences::ExamMode::NoSymNoText ||
+                        GlobalPreferences::sharedGlobalPreferences()->examMode() ==
+                        GlobalPreferences::ExamMode::NoSym) {
+                        App::app()->displayWarning(I18n::Message::ForbidenAppInExamMode1,
+                                                   I18n::Message::ForbidenAppInExamMode2);
+                    } else {
+                        External::Archive::File executable;
+                        if (External::Archive::executableAtIndex(index - container->numberOfApps(), executable)) {
+                            uint32_t res = External::Archive::executeFile(executable.name, ((App *) m_app)->heap(),
+                                                                          ((App *) m_app)->heapSize());
+                            ((App *) m_app)->redraw();
+                            switch (res) {
+                                case 0:
+                                    break;
+                                case 1:
+                                    Container::activeApp()->displayWarning(I18n::Message::ExternalAppApiMismatch);
+                                    break;
+                                case 2:
+                                    Container::activeApp()->displayWarning(I18n::Message::StorageMemoryFull1);
+                                    break;
+                                default:
+                                    Container::activeApp()->displayWarning(I18n::Message::ExternalAppExecError);
+                                    break;
+                            }
+                            return true;
                         }
-                        return true;
                     }
                 }
             } else {
@@ -239,7 +244,7 @@ namespace Home {
                 } else {
                     appCell->setVisible(false);
                 }
-            } else{
+            } else {
                 appCell->setVisible(false);
             }
         } else {
@@ -254,7 +259,10 @@ namespace Home {
         AppsContainer *container = AppsContainer::sharedAppsContainer();
         assert(container->numberOfApps() > 0);
 #ifdef HOME_DISPLAY_EXTERNALS
-        return container->numberOfApps() - 1 + External::Archive::numberOfExecutables();
+        Ion::Keyboard::State state = Ion::Keyboard::scan();
+        if (state.keyDown(Ion::Keyboard::Key::Five)) {
+            return container->numberOfApps() - 1 + External::Archive::numberOfExecutables();
+        }
 #else
         return container->numberOfApps() - 1;
 #endif
