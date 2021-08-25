@@ -9,13 +9,9 @@ extern "C" {
 #include <assert.h>
 }
 
-#ifdef HOME_DISPLAY_EXTERNALS
-
 #include "../external/external_icon.h"
 #include "../external/archive.h"
 #include <string.h>
-
-#endif
 
 namespace Home {
 
@@ -82,14 +78,15 @@ namespace Home {
         m_view.backgroundView()->setDefaultColor(Palette::HomeBackground);
 
 
-#ifdef HOME_DISPLAY_EXTERNALS
-        int index = External::Archive::indexFromName("wallpaper.obm");
-        if (index > -1) {
-            External::Archive::File image;
-            External::Archive::fileAtIndex(index, image);
-            m_view.backgroundView()->setBackgroundImage(image.data);
+        Ion::Keyboard::State state = Ion::Keyboard::scan();
+        if (state.keyDown(Ion::Keyboard::Key::Five)) {
+            int index = External::Archive::indexFromName("wallpaper.obm");
+            if (index > -1) {
+                External::Archive::File image;
+                External::Archive::fileAtIndex(index, image);
+                m_view.backgroundView()->setBackgroundImage(image.data);
+            }
         }
-#endif
     }
 
     bool Controller::handleEvent(Ion::Events::Event event) {
@@ -99,7 +96,6 @@ namespace Home {
             int index =
                     selectionDataSource()->selectedRow() * k_numberOfColumns + selectionDataSource()->selectedColumn() +
                     1;
-#ifdef HOME_DISPLAY_EXTERNALS
             if (index >= container->numberOfApps()) {
                 Ion::Keyboard::State state = Ion::Keyboard::scan();
                 if (state.keyDown(Ion::Keyboard::Key::Five)) {
@@ -135,7 +131,6 @@ namespace Home {
                     }
                 }
             } else {
-#endif
                 ::App::Snapshot *selectedSnapshot = container->appSnapshotAtIndex(index);
                 if (ExamModeConfiguration::appIsForbiddenInExamMode(selectedSnapshot->descriptor()->examinationLevel(),
                                                                     GlobalPreferences::sharedGlobalPreferences()->examMode())) {
@@ -146,9 +141,7 @@ namespace Home {
                     assert(switched);
                     (void) switched; // Silence compilation warning about unused variable.
                 }
-#ifdef HOME_DISPLAY_EXTERNALS
             }
-#endif
             return true;
         }
 
@@ -258,14 +251,12 @@ namespace Home {
     int Controller::numberOfIcons() const {
         AppsContainer *container = AppsContainer::sharedAppsContainer();
         assert(container->numberOfApps() > 0);
-#ifdef HOME_DISPLAY_EXTERNALS
         Ion::Keyboard::State state = Ion::Keyboard::scan();
         if (state.keyDown(Ion::Keyboard::Key::Five)) {
             return container->numberOfApps() - 1 + External::Archive::numberOfExecutables();
+        } else {
+            return container->numberOfApps() - 1;
         }
-#else
-        return container->numberOfApps() - 1;
-#endif
     }
 
     void Controller::tableViewDidChangeSelection(SelectableTableView *t, int previousSelectedCellX,
