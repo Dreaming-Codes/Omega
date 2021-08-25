@@ -7,36 +7,35 @@ extern "C" {
 
 namespace Home {
 
-I18n::Message App::Descriptor::name() {
-  return I18n::Message::Apps;
-}
+    I18n::Message App::Descriptor::name() {
+        return I18n::Message::Apps;
+    }
 
-I18n::Message App::Descriptor::upperName() {
-  return I18n::Message::AppsCapital;
-}
+    I18n::Message App::Descriptor::upperName() {
+        return I18n::Message::AppsCapital;
+    }
 
-App * App::Snapshot::unpack(Container * container) {
-  return new (container->currentAppBuffer()) App(this);
-}
+    App *App::Snapshot::unpack(Container *container) {
+        return new(container->currentAppBuffer()) App(this);
+    }
 
-App::Descriptor * App::Snapshot::descriptor() {
-  static Descriptor descriptor;
-  return &descriptor;
-}
+    App::Descriptor *App::Snapshot::descriptor() {
+        static Descriptor descriptor;
+        return &descriptor;
+    }
 
-void App::didBecomeActive(Window * window) {
-  ::App::didBecomeActive(window);
-  m_window = window;
-}
+    void App::didBecomeActive(Window *window) {
+        ::App::didBecomeActive(window);
+        m_window = window;
+    }
 
-void App::redraw() {
-  m_window->redraw(true);
-}
+    void App::redraw() {
+        m_window->redraw(true);
+    }
 
-App::App(Snapshot * snapshot) :
-  ::App(snapshot, &m_controller, I18n::Message::Warning),
-  m_controller(&m_modalViewController, snapshot, this)
-{
-}
+    App::App(Snapshot *snapshot) :
+            ::App(snapshot, &m_controller, I18n::Message::Warning),
+            m_controller(&m_modalViewController, snapshot, this) {
+    }
 
 }

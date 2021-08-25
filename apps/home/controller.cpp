@@ -194,6 +194,15 @@ int Controller::reusableCellCount() const {
 void Controller::willDisplayCellAtLocation(HighlightCell * cell, int i, int j) {
   AppCell * appCell = (AppCell *)cell;
   AppsContainer * container = AppsContainer::sharedAppsContainer();
+  if(appCell->m_external_app){
+      Ion::Keyboard::State state = Ion::Keyboard::scan();
+      if(state.keyDown(Ion::Keyboard::Key::Five)){
+          appCell->setVisible(true);
+      }else{
+          appCell->setVisible(false);
+      }
+      return;
+  }
   int appIndex = (j * k_numberOfColumns + i) + 1;
   if (appIndex >= container->numberOfApps()) {
 #ifdef HOME_DISPLAY_EXTERNALS
