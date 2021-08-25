@@ -212,11 +212,9 @@ namespace Home {
         AppsContainer *container = AppsContainer::sharedAppsContainer();
         int appIndex = (j * k_numberOfColumns + i) + 1;
         if (appIndex >= container->numberOfApps()) {
-#ifdef HOME_DISPLAY_EXTERNALS
             Ion::Keyboard::State state = Ion::Keyboard::scan();
             if (state.keyDown(Ion::Keyboard::Key::Five)) {
                 External::Archive::File app_file;
-
 
                 if (External::Archive::executableAtIndex(appIndex - container->numberOfApps(), app_file)) {
                     char temp_name_buffer[100];
@@ -241,10 +239,9 @@ namespace Home {
                 } else {
                     appCell->setVisible(false);
                 }
+            } else{
+                appCell->setVisible(false);
             }
-#else
-            appCell->setVisible(false);
-#endif
         } else {
             appCell->setVisible(true);
             ::App::Descriptor *descriptor = container->appSnapshotAtIndex(
