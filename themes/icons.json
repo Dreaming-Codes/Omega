@@ -1,15 +1,13 @@
 {
     "apps/exam_icon.png" : "exam_icon.png",
     "apps/on_boarding/logo_icon.png" : "logo_icon.png",
-    
-    "apps/atomic/atomic_icon.png" : "apps/atomic_icon.png",
+
     "apps/calculation/calculation_icon.png" : "apps/calculation_icon.png",
     "apps/code/code_icon.png" : "apps/code_icon.png",
     "apps/external/external_icon.png" : "apps/external_icon.png",
     "apps/graph/graph_icon.png" : "apps/graph_icon.png",
     "apps/probability/probability_icon.png" : "apps/probability_icon.png",
     "apps/regression/regression_icon.png" : "apps/regression_icon.png",
-    "apps/rpn/rpn_icon.png" : "apps/rpn_icon.png",
     "apps/sequence/sequence_icon.png" : "apps/sequence_icon.png",
     "apps/settings/settings_icon.png" : "apps/settings_icon.png",
     "apps/solver/solver_icon.png" : "apps/solver_icon.png",
