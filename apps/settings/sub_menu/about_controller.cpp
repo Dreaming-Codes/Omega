@@ -4,7 +4,10 @@
 #include <cmath>
 #include <apps/settings/main_controller.h>
 #include <poincare/integer.h>
+#include <poincare/number.h>
 #include <ion/storage.h>
+
+#include <poincare/preferences.h>
 
 #define MP_STRINGIFY_HELPER(x) #x
 #define MP_STRINGIFY(x) MP_STRINGIFY_HELPER(x)
@@ -13,6 +16,8 @@
 #error This file expects OMEGA_STATE to be defined
 #endif
 
+
+using namespace Shared;
 namespace Settings {
 
 AboutController::AboutController(Responder * parentResponder) :
@@ -48,20 +53,24 @@ bool AboutController::handleEvent(Ion::Events::Event event) {
     if (!(event == Ion::Events::Right)) {
       if (childLabel == I18n::Message::SoftwareVersion) {
         MessageTableCellWithBuffer * myCell = (MessageTableCellWithBuffer *)m_selectableTableView.selectedCell();
-        if (strcmp(myCell->accessoryText(), Ion::patchLevel()) == 0) {
+        const char * currentText = myCell->accessoryText();
+        if (strcmp(currentText, Ion::patchLevel()) == 0) {
+          myCell->setAccessoryText(Ion::pcbVersion());
+        } else if (strcmp(currentText, Ion::pcbVersion()) == 0) {
           myCell->setAccessoryText(Ion::softwareVersion());
-          return true;
+        } else {
+          assert(strcmp(currentText, Ion::softwareVersion()) == 0);
+          myCell->setAccessoryText(Ion::patchLevel());
         }
-        myCell->setAccessoryText(Ion::patchLevel());
         return true;
       }
-      if (childLabel == I18n::Message::OmegaVersion) {
+      if (childLabel == I18n::Message::UpsilonVersion) {
         MessageTableCellWithBuffer * myCell = (MessageTableCellWithBuffer *)m_selectableTableView.selectedCell();
-        if (strcmp(myCell->accessoryText(), Ion::omegaVersion()) == 0) {
+        if (strcmp(myCell->accessoryText(), Ion::UpsilonVersion()) == 0) {
           myCell->setAccessoryText(MP_STRINGIFY(OMEGA_STATE)); //Change for public/dev
           return true;
         }
-        myCell->setAccessoryText(Ion::omegaVersion());
+        myCell->setAccessoryText(Ion::UpsilonVersion());
         return true;
       }
       if (childLabel == I18n::Message::MemUse) {
@@ -89,6 +98,22 @@ bool AboutController::handleEvent(Ion::Events::Event event) {
           myCell->setAccessoryText(memUseBuffer);
         }
         
+        return true;
+      }
+      if(childLabel == I18n::Message::Battery){
+        MessageTableCellWithBuffer * myCell = (MessageTableCellWithBuffer *)m_selectableTableView.selectedCell();
+        char batteryLevel[5];
+        if(strchr(myCell->accessoryText(), '%') == NULL){
+          int batteryLen = Poincare::Integer((int) ((Ion::Battery::voltage() - 3.6) * 166)).serialize(batteryLevel, 5);
+          batteryLevel[batteryLen] = '%';
+          batteryLevel[batteryLen+1] = '\0';
+        }else{
+          int batteryLen = Poincare::Number::FloatNumber(Ion::Battery::voltage()).serialize(batteryLevel, 5, Poincare::Preferences::PrintFloatMode::Decimal, 3);
+          batteryLevel[batteryLen] = 'V';
+          batteryLevel[batteryLen+1] = '\0';
+        }
+
+        myCell->setAccessoryText(batteryLevel);
         return true;
       }
     }
@@ -155,11 +180,18 @@ void AboutController::willDisplayCellForIndex(HighlightCell * cell, int index) {
   } else {
     MessageTableCellWithBuffer * myCell = (MessageTableCellWithBuffer *)cell;
     static const char * mpVersion = MICROPY_VERSION_STRING;
+
+    static char batteryLevel[5];
+    int batteryLen = Poincare::Number::FloatNumber(Ion::Battery::voltage()).serialize(batteryLevel, 5, Poincare::Preferences::PrintFloatMode::Decimal, 3);
+    batteryLevel[batteryLen] = 'V';
+    batteryLevel[batteryLen + 1] = '\0';
+
     static const char * messages[] = {
       (const char*) Ion::username(),
       Ion::softwareVersion(),
-      Ion::omegaVersion(),
+      Ion::UpsilonVersion(),
       mpVersion,
+      batteryLevel,
       "",
       Ion::serialNumber(),
       Ion::fccId(),

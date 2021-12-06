@@ -10,7 +10,6 @@
 #include "python_toolbox.h"
 #include "variable_box_controller.h"
 #include "../shared/shared_app.h"
-#include "toolbox_ion_keys.h"
 
 namespace Code {
 
@@ -76,9 +75,7 @@ public:
 
   VariableBoxController * variableBoxController() { return &m_variableBoxController; }
 
-  static constexpr int k_pythonHeapSize = 100000;
-
-  Code::toolboxIonKeys * toolboxIonKeys();
+  static constexpr int k_pythonHeapSize = 67000;
 
 private:
   /* Python delegate:
@@ -96,7 +93,6 @@ private:
   StackViewController m_codeStackViewController;
   PythonToolbox m_toolbox;
   VariableBoxController m_variableBoxController;
-  Code::toolboxIonKeys m_toolboxIonKeys;
 };
 
 }

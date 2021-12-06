@@ -30,6 +30,14 @@ public:
   void setTempExamMode(ExamMode examMode);
   bool showPopUp() const { return m_showPopUp; }
   void setShowPopUp(bool showPopUp) { m_showPopUp = showPopUp; }
+  bool dfuUnlocked() const { return m_dfuUnlocked; }
+  void setDfuUnlocked(bool unlocked) { m_dfuUnlocked = unlocked; }
+  int dfuLevel() const { return m_dfuLevel; }
+  void setDfuLevel(int level) { m_dfuLevel = level; }
+  bool autocomplete() const { return m_autoComplete; }
+  void setAutocomplete(bool autocomple) { m_autoComplete = autocomple; }
+  bool syntaxhighlighting() const { return m_syntaxhighlighting; }
+  void setSyntaxhighlighting(bool syntaxhighlight) { m_syntaxhighlighting = syntaxhighlight; }
   int brightnessLevel() const { return m_brightnessLevel; }
   void setBrightnessLevel(int brightnessLevel);
   const KDFont * font() const { return m_font; }
@@ -44,6 +52,10 @@ private:
     m_examMode(ExamMode::Unknown),
     m_tempExamMode(ExamMode::Standard),
     m_showPopUp(true),
+    m_dfuUnlocked(false),
+    m_dfuLevel(0),
+    m_autoComplete(true),
+    m_syntaxhighlighting(true),
     m_brightnessLevel(Ion::Backlight::MaxBrightness),
     m_font(KDFont::LargeFont) {}
   I18n::Language m_language;
@@ -53,6 +65,10 @@ private:
   mutable ExamMode m_examMode;
   mutable ExamMode m_tempExamMode;
   bool m_showPopUp;
+  bool m_dfuUnlocked;
+  uint8_t m_dfuLevel;
+  bool m_autoComplete;
+  bool m_syntaxhighlighting;
   int m_brightnessLevel;
   const KDFont * m_font;
 };

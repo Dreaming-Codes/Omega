@@ -1,6 +1,8 @@
 #include <drivers/board.h>
 #include <drivers/cache.h>
+#include <drivers/internal_flash.h>
 #include <drivers/config/clocks.h>
+#include <drivers/config/internal_flash.h>
 #include <drivers/external_flash.h>
 #include <regs/regs.h>
 #include <ion.h>
@@ -27,8 +29,10 @@ void initMPU() {
   // 1.1 Memory barrier
   Cache::dmb();
 
-  // 1.2 Disable fault exceptions
-  CORTEX.SHCRS()->setMEMFAULTENA(false);
+  // 1.2 Enable fault exceptions
+  CORTEX.SHCRS()->setMEMFAULTENA(true);
+  CORTEX.SHCRS()->setBUSFAULTENA(true);
+  CORTEX.SHCRS()->setUSGFAULTENA(true); 
 
   // 1.3 Disable the MPU and clear the control register
   MPU.CTRL()->setENABLE(false);
@@ -370,6 +374,44 @@ void shutdownClocks(bool keepLEDAwake) {
   }
   RCC.APB1ENR()->set(apb1enr);
   RCC.AHB1ENR()->set(ahb1enr);
+}
+
+constexpr int k_pcbVersionOTPIndex = 0;
+
+/* As we want the PCB versions to be in ascending order chronologically, and
+ * because the OTP are initialized with 1s, we store the bitwise-not of the
+ * version number. This way, devices with blank OTP are considered version 0. */
+
+PCBVersion pcbVersion() {
+#if IN_FACTORY
+  /* When flashing for the first time, we want all systems that depend on the
+   * PCB version to function correctly before flashing the PCB version. This
+   * way, flashing the PCB version can be done last. */
+  return PCB_LATEST;
+#else
+  PCBVersion version = readPCBVersionInMemory();
+  return (version == k_alternateBlankVersion ? 0 : version);
+#endif
+}
+
+PCBVersion readPCBVersionInMemory() {
+  return ~(*reinterpret_cast<const PCBVersion *>(InternalFlash::Config::OTPAddress(k_pcbVersionOTPIndex)));
+}
+
+void writePCBVersion(PCBVersion version) {
+  uint8_t * destination = reinterpret_cast<uint8_t *>(InternalFlash::Config::OTPAddress(k_pcbVersionOTPIndex));
+  PCBVersion formattedVersion = ~version;
+  InternalFlash::WriteMemory(destination, reinterpret_cast<uint8_t *>(&formattedVersion), sizeof(formattedVersion));
+}
+
+void lockPCBVersion() {
+  uint8_t * destination = reinterpret_cast<uint8_t *>(InternalFlash::Config::OTPLockAddress(k_pcbVersionOTPIndex));
+  uint8_t zero = 0;
+  InternalFlash::WriteMemory(destination, &zero, sizeof(zero));
+}
+
+bool pcbVersionIsLocked() {
+  return *reinterpret_cast<const uint8_t *>(InternalFlash::Config::OTPLockAddress(k_pcbVersionOTPIndex)) == 0;
 }
 
 }

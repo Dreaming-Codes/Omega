@@ -29,7 +29,7 @@ AppsContainer::AppsContainer() :
   m_globalContext(),
   m_variableBoxController(),
   m_examPopUpController(this),
-  m_promptController(k_promptMessages, k_promptColors, k_promptNumberOfMessages),
+  m_promptController(k_promptMessages, k_promptFGColors, k_promptBGColors, k_promptNumberOfMessages),
   m_batteryTimer(),
   m_suspendTimer(),
   m_backlightDimmingTimer(),
@@ -147,7 +147,7 @@ bool AppsContainer::dispatchEvent(Ion::Events::Event event) {
        * pictogram. */
       updateBatteryState();
       if (switchTo(usbConnectedAppSnapshot())) {
-        Ion::USB::DFU();
+        Ion::USB::DFU(true, GlobalPreferences::sharedGlobalPreferences()->dfuUnlocked(), GlobalPreferences::sharedGlobalPreferences()->dfuLevel());
         // Update LED when exiting DFU mode
         Ion::LED::updateColorWithPlugAndCharge();
         bool switched = switchTo(activeSnapshot);

@@ -12,6 +12,21 @@ include build/toolchain.$(TOOLCHAIN).mak
 include build/variants.mak
 include build/helpers.mk
 
+ifeq (${MODEL}, n0100)
+  ifeq ($(filter reader,$(apps_list)),)
+  	$(warning reader app included, removing it on n0100. )
+  	EPSILON_APPS := $(filter-out reader,$(EPSILON_APPS))
+  endif
+  ifneq ($(words $(EPSILON_I18N)), 1)
+  	$(warning Only use 1 language on n0100, defaulting to en. )
+  	EPSILON_I18N := en
+  endif
+  ifeq ($(INCLUDE_ULAB), 1)
+    $(warning Removing uLab on n0100. )
+    INCLUDE_ULAB := 0
+  endif
+endif
+
 ifeq (${MODEL}, n0110)
   apps_list = ${EPSILON_APPS}
 else
@@ -20,6 +35,10 @@ endif
 
 ifdef FORCE_EXTERNAL
   apps_list = ${EPSILON_APPS}
+endif
+
+ifeq ($(INCLUDE_ULAB), 1)
+  SFLAGS += -DINCLUDE_ULAB
 endif
 
 ifdef HOME_DISPLAY_EXTERNALS

@@ -157,6 +157,37 @@ port_src += $(addprefix python/port/,\
   mphalport.c \
 )
 
+ifeq ($(INCLUDE_ULAB), 1)
+port_src += $(addprefix python/port/,\
+  mod/ulab/scipy/linalg/linalg.c \
+  mod/ulab/scipy/optimize/optimize.c \
+  mod/ulab/scipy/signal/signal.c \
+  mod/ulab/scipy/special/special.c \
+  mod/ulab/ndarray_operators.c \
+  mod/ulab/ulab_tools.c \
+  mod/ulab/ndarray.c \
+  mod/ulab/ndarray_properties.c \
+  mod/ulab/numpy/approx/approx.c \
+  mod/ulab/numpy/compare/compare.c \
+  mod/ulab/ulab_create.c \
+  mod/ulab/numpy/fft/fft.c \
+  mod/ulab/numpy/fft/fft_tools.c \
+  mod/ulab/numpy/filter/filter.c \
+  mod/ulab/numpy/linalg/linalg.c \
+  mod/ulab/numpy/linalg/linalg_tools.c \
+  mod/ulab/numpy/numerical/numerical.c \
+  mod/ulab/numpy/poly/poly.c \
+  mod/ulab/numpy/stats/stats.c \
+  mod/ulab/numpy/transform/transform.c \
+  mod/ulab/numpy/vector/vector.c \
+  mod/ulab/numpy/numpy.c \
+  mod/ulab/scipy/scipy.c \
+  mod/ulab/user/user.c \
+  mod/ulab/utils/utils.c \
+  mod/ulab/ulab.c \
+)
+endif
+
 # Workarounds
 
 # Rename urandom to random

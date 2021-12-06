@@ -55,13 +55,13 @@
 #define MICROPY_PY_ASYNC_AWAIT (0)
 
 // Whether to support bytearray object
-#define MICROPY_PY_BUILTINS_BYTEARRAY (0)
+#define MICROPY_PY_BUILTINS_BYTEARRAY (1)
 
 // Whether to support frozenset object
 #define MICROPY_PY_BUILTINS_FROZENSET (1)
 
 // Whether to support property object
-#define MICROPY_PY_BUILTINS_PROPERTY (0)
+#define MICROPY_PY_BUILTINS_PROPERTY (1)
 
 // Whether to support unicode strings
 #define MICROPY_PY_BUILTINS_STR_UNICODE (1)
@@ -97,7 +97,7 @@
 #define MICROPY_PY_STRUCT (0)
 
 // Whether to provide "sys" module
-#define MICROPY_PY_SYS (0)
+#define MICROPY_PY_SYS (1)
 
 // Whether to provide the "urandom" module
 #define MICROPY_PY_URANDOM (1)
@@ -137,6 +137,8 @@ extern const struct _mp_obj_module_t modtime_module;
 extern const struct _mp_obj_module_t modos_module;
 extern const struct _mp_obj_module_t modturtle_module;
 
+#if !defined(INCLUDE_ULAB)
+
 #define MICROPY_PORT_BUILTIN_MODULES \
     { MP_ROM_QSTR(MP_QSTR_ion), MP_ROM_PTR(&modion_module) }, \
     { MP_ROM_QSTR(MP_QSTR_kandinsky), MP_ROM_PTR(&modkandinsky_module) }, \
@@ -145,6 +147,22 @@ extern const struct _mp_obj_module_t modturtle_module;
     { MP_ROM_QSTR(MP_QSTR_time), MP_ROM_PTR(&modtime_module) }, \
     { MP_ROM_QSTR(MP_QSTR_os), MP_ROM_PTR(&modos_module) }, \
     { MP_ROM_QSTR(MP_QSTR_turtle), MP_ROM_PTR(&modturtle_module) }, \
+
+#else
+extern const struct _mp_obj_module_t ulab_user_cmodule;
+
+#define MICROPY_PORT_BUILTIN_MODULES \
+    { MP_ROM_QSTR(MP_QSTR_ion), MP_ROM_PTR(&modion_module) }, \
+    { MP_ROM_QSTR(MP_QSTR_kandinsky), MP_ROM_PTR(&modkandinsky_module) }, \
+    { MP_ROM_QSTR(MP_QSTR_matplotlib), MP_ROM_PTR(&modmatplotlib_module) }, \
+    { MP_ROM_QSTR(MP_QSTR_matplotlib_dot_pyplot), MP_ROM_PTR(&modpyplot_module) }, \
+    { MP_ROM_QSTR(MP_QSTR_time), MP_ROM_PTR(&modtime_module) }, \
+    { MP_ROM_QSTR(MP_QSTR_os), MP_ROM_PTR(&modos_module) }, \
+    { MP_ROM_QSTR(MP_QSTR_turtle), MP_ROM_PTR(&modturtle_module) }, \
+    { MP_ROM_QSTR(MP_QSTR_ulab), MP_ROM_PTR(&ulab_user_cmodule) },        \
+
+#endif
+
 
 // Enable setjmp in debug mode. This is to avoid some optimizations done
 // specifically for x86_64 using inline assembly, which makes the debug binary

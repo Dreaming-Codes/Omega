@@ -8,9 +8,11 @@
 #include "sub_menu/accessibility_controller.h"
 #include "sub_menu/datetime_controller.h"
 #include "sub_menu/exam_mode_controller.h"
+#include "sub_menu/code_options_controller.h"
 #include "sub_menu/localization_controller.h"
 #include "sub_menu/math_options_controller.h"
 #include "sub_menu/preferences_controller.h"
+#include "sub_menu/usb_protection_controller.h"
 
 namespace Settings {
 
@@ -22,10 +24,13 @@ extern const Shared::SettingsMessageTree s_symbolChildren[4];
 extern const Shared::SettingsMessageTree s_symbolFunctionChildren[3];
 extern const Shared::SettingsMessageTree s_modelMathOptionsChildren[6];
 extern const Shared::SettingsMessageTree s_modelFontChildren[2];
+extern const Shared::SettingsMessageTree s_codeChildren[3];
 extern const Shared::SettingsMessageTree s_modelDateTimeChildren[3];
 extern const Shared::SettingsMessageTree s_accessibilityChildren[6];
 extern const Shared::SettingsMessageTree s_contributorsChildren[23];
-extern const Shared::SettingsMessageTree s_modelAboutChildren[8];
+extern const Shared::SettingsMessageTree s_modelAboutChildren[9];
+extern const Shared::SettingsMessageTree s_usbProtectionChildren[2];
+extern const Shared::SettingsMessageTree s_usbProtectionLevelChildren[3];
 extern const Shared::SettingsMessageTree s_model;
 
 class MainController : public ViewController, public ListViewDataSource, public SelectableTableViewDataSource {
@@ -70,9 +75,11 @@ private:
   LocalizationController m_localizationController;
   AccessibilityController m_accessibilityController;
   DateTimeController m_dateTimeController;
+  CodeOptionsController m_codeOptionsController;
   ExamModeController m_examModeController;
   AboutController m_aboutController;
   PreferencesController m_preferencesController;
+  UsbInfoController m_usbInfoController;
 };
 
 }
